@@ -320,7 +320,7 @@ class MySQLDatabase:
              "¿Cuál es el orden de la ecuación: d²y/dx² + 3(dy/dx) - 2y = 0?",
              r"\frac{d^2y}{dx^2} + 3\frac{dy}{dx} - 2y = 0",
              "opcion_multiple",
-             json.dumps(["2", "segundo", "orden 2"]),
+             json.dumps(["2", "segundo", "orden 2", "segundo orden"]),
              json.dumps(["1 - Primer orden", "2 - Segundo orden", "3 - Tercer orden", "4 - Cuarto orden"]),
              "El orden es la derivada más alta que aparece.",
              "El orden es 2 porque la derivada más alta es d²y/dx² (segunda derivada).",
@@ -772,6 +772,9 @@ class MySQLDatabase:
         """, values)
         
         self.connection.commit()
+
+        # Desbloquear categorías según nivel actual
+        self._unlock_categories(user_id, new_level, cursor)
         
         # Verificar logros
         unlocked_achievements = self._check_achievements(user_id, cursor)
@@ -782,6 +785,20 @@ class MySQLDatabase:
             'level_up': new_level > progress['nivel'],
             'unlocked_achievements': unlocked_achievements
         }
+
+    def _unlock_categories(self, user_id: int, user_level: int, cursor):
+        """Desbloquea categorías cuyo nivel requerido sea <= nivel actual."""
+        cursor.execute("""
+            INSERT INTO categorias_usuario (usuario_id, categoria_id, desbloqueado, unlocked_at)
+            SELECT %s, c.id, TRUE, NOW()
+            FROM categorias c
+            WHERE c.nivel_requerido <= %s
+              AND NOT EXISTS (
+                  SELECT 1 FROM categorias_usuario cu 
+                  WHERE cu.usuario_id = %s AND cu.categoria_id = c.id
+              )
+        """, (user_id, user_level, user_id))
+        self.connection.commit()
     
     def _check_achievements(self, user_id: int, cursor) -> List[Dict]:
         """Verifica y desbloquea logros."""

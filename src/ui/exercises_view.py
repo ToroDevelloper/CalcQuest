@@ -708,7 +708,14 @@ class ExerciseDialog(QDialog):
         correct_answers = self.exercise_data.get('respuestas_correctas', [])
         user_normalized = _normalize(user_answer)
         
-        is_correct = any(user_normalized == _normalize(ans) for ans in correct_answers)
+        # Consideramos equivalencias flexibles: igualdad exacta o inclusión (p.ej. "segundo orden" vs "2").
+        normalized_correct = [_normalize(ans) for ans in correct_answers]
+        is_correct = any(
+            user_normalized == ans_norm or
+            user_normalized in ans_norm or
+            ans_norm in user_normalized
+            for ans_norm in normalized_correct
+        )
         
         # Calcular XP
         elapsed_time = int(time.time() - self.start_time)

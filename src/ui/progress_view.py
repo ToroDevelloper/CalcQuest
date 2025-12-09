@@ -320,7 +320,8 @@ class LevelProgressWidget(QFrame):
     
     def _calculate_xp_for_level(self, level: int) -> int:
         """Calcula el XP necesario para un nivel."""
-        return int(100 * (1.5 ** (level - 1)))
+        # Debe coincidir con la lógica del backend: 100 XP por nivel
+        return 100 * (level - 1)
 
 
 class WeeklyActivityWidget(QFrame):
@@ -697,6 +698,12 @@ class ProgressView(QWidget):
     
     def _display_data(self, user_data: dict, achievements: list):
         """Muestra los datos del usuario."""
+        # Normalizar claves provenientes del backend (MySQL usa total_xp/racha_actual)
+        user_data = dict(user_data or {})
+        user_data['xp_total'] = user_data.get('xp_total', user_data.get('total_xp', 0))
+        user_data['racha_dias'] = user_data.get('racha_dias', user_data.get('racha_actual', 0))
+        user_data['nombre'] = user_data.get('nombre', user_data.get('username', 'Usuario'))
+
         # Actualizar widget de nivel sin depender del placeholder borrado
         new_level_widget = LevelProgressWidget(user_data)
         target_layout = None
