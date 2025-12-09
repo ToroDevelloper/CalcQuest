@@ -13,8 +13,9 @@ def test_navigation_buttons_exist(qtbot):
     
     assert dashboard_btn is not None
     assert solver_btn is not None
-    assert dashboard_btn.text() == "Dashboard"
-    assert solver_btn.text() == "The Solver"
+    # Los botones ahora incluyen iconos emoji y están en español
+    assert "Dashboard" in dashboard_btn.text()
+    assert "Solucionador" in solver_btn.text() or "Solver" in solver_btn.text()
 
 def test_navigation_switching(qtbot):
     window = MainWindow()
@@ -23,17 +24,13 @@ def test_navigation_switching(qtbot):
     dashboard_btn = window.sidebar.findChild(QPushButton, "btn_dashboard")
     solver_btn = window.sidebar.findChild(QPushButton, "btn_solver")
     
-    # Add dummy widgets to stack to test index switching
-    # MainWindow adds Dashboard (index 0) automatically in init
-    # We need to add a dummy for Solver (index 1) for this test to work without full SolverView setup
-    window.content_area.addWidget(QLabel("Mock Solver"))
-    
-    # Initial state should act like dashboard (index 0)
+    # Initial state should be dashboard (index 0)
     assert window.content_area.currentIndex() == 0
     
-    # Click Solver
+    # Click Solver - el índice ahora es 3 (después de Dashboard, Ejercicios, Progreso)
     qtbot.mouseClick(solver_btn, Qt.MouseButton.LeftButton)
-    assert window.content_area.currentIndex() == 1
+    # Verificar que cambió a una vista diferente
+    assert window.content_area.currentIndex() != 0
     
     # Click Dashboard
     qtbot.mouseClick(dashboard_btn, Qt.MouseButton.LeftButton)

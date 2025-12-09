@@ -68,7 +68,6 @@ class ModuleCard(QFrame):
                 border: 2px solid transparent;
             }}
             QFrame:hover {{
-                transform: translateY(-3px);
                 border: 2px solid #818cf8;
             }}
         """

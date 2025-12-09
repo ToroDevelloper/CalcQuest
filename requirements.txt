@@ -1,6 +1,7 @@
 PyQt6
 sympy
 matplotlib
+mysql-connector-python
 pytest
 pytest-qt
 coverage

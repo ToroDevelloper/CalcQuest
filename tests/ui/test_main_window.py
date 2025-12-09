@@ -6,7 +6,7 @@ def test_window_title(qtbot):
     window = MainWindow()
     qtbot.addWidget(window)
     
-    assert window.windowTitle() == "CalcQuest - Tu Aventura Matemática"
+    assert window.windowTitle() == "CalcQuest - Aprende Ecuaciones Diferenciales"
 
 def test_initial_layout(qtbot):
     window = MainWindow()

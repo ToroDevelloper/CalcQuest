@@ -4,16 +4,17 @@ from src.engine.step_engine import StepEngine, Step
 def test_identify_linear_first_order():
     # Input: y' + 2y = e^x
     # Should identify P(x) = 2 and Q(x) = e^x
-    equation_str = "Derivative(y(x), x) + 2*y(x) - exp(x)"
+    equation_str = "y' + 2y = e^x"
     engine = StepEngine()
     
     # We expect the engine to identify this as a First Order Linear ODE
     ode_type = engine.identify_type(equation_str)
-    assert ode_type == "First Order Linear"
+    # El motor ahora usa nombres en español
+    assert ode_type == "Lineal de Primer Orden"
 
 def test_solve_linear_steps():
     # Test the step-by-step breakdown for y' + 2y = e^x
-    equation_str = "Derivative(y(x), x) + 2*y(x) - exp(x)"
+    equation_str = "y' + 2y = e^x"
     engine = StepEngine()
     
     steps = engine.solve_steps(equation_str)
