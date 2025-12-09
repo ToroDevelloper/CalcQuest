@@ -1,8 +1,8 @@
-# Documento de Diseño Técnico (TDD) - Diffy
-**Asistente Personal Gamificado para Cálculo y Ecuaciones Diferenciales**
-*(Versión 2.2 - Rebranding Final)*
+# Documento de Diseño Técnico (TDD) - CalcQuest
+**Plataforma Gamificada de Aventura para Cálculo y Ecuaciones Diferenciales**
+*(Versión 2.3 - Rebranding Final)*
 
-**Proyecto:** Diffy (Anteriormente Aprende-E.D)
+**Proyecto:** CalcQuest (Anteriormente Aprende-E.D)
 **Autor:** Kilo Code (Arquitecto de Software Senior)
 **Fecha:** 09 de Diciembre, 2025
 **Filosofía:** "Construye tu conocimiento, test a test."
