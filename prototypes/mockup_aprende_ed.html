@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprende-E.D | Mockup de Interfaz</title>
+    <!-- MathJax Configuration -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --sidebar-bg: #1e293b;
+            --sidebar-hover: #334155;
+            --sidebar-text: #e2e8f0;
+            --accent-color: #3b82f6; /* Azul Académico */
+            --accent-hover: #2563eb;
+            --bg-color: #f8fafc;
+            --panel-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-color);
+            overflow: hidden; /* Simula ventana fija de escritorio */
+        }
+
+        /* --- SIDEBAR (Navigation) --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #0f172a;
+        }
+
+        .brand {
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--sidebar-hover);
+        }
+
+        .brand-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+            font-family: serif;
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 20px 0;
+            list-style: none;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .nav-item:hover {
+            background-color: var(--sidebar-hover);
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background-color: var(--sidebar-hover);
+            color: #fff;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .user-profile {
+            padding: 20px;
+            border-top: 1px solid var(--sidebar-hover);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--sidebar-hover);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        /* --- MAIN CONTENT AREA --- */
+        .main-window {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Header */
+        .toolbar {
+            height: 60px;
+            background-color: var(--panel-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+        }
+
+        .breadcrumbs {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumbs strong {
+            color: var(--text-primary);
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .stat-pill {
+            background: #f1f5f9;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-pill.elo {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        /* Workspace (Split View) */
+        .workspace {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 450px; /* Panel izquierdo flexible, derecho fijo */
+            overflow: hidden;
+        }
+
+        /* Left Panel: Lesson/Problem */
+        .content-panel {
+            padding: 30px;
+            overflow-y: auto;
+            background-color: var(--bg-color);
+        }
+
+        .paper-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            font-weight: 500;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        .math-block {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--accent-color);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .problem-text {
+            line-height: 1.6;
+            color: #334155;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-top: 30px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .math-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .math-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .action-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* Right Panel: Visualization/Tools */
+        .tools-panel {
+            background-color: white;
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .canvas-container {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .matplotlib-sim {
+            width: 100%;
+            height: 300px;
+            background-color: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .plot-legend {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            width: 100%;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+
+        .color-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .hint-box {
+            margin-top: auto;
+            padding: 20px;
+            background-color: #fefff5;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .hint-title {
+            color: var(--warning);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .hint-text {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        /* SVG Graph Styles */
+        .axis { stroke: #94a3b8; stroke-width: 1; }
+        .grid { stroke: #f1f5f9; stroke-width: 1; }
+        .function-line { stroke: #3b82f6; stroke-width: 2; fill: none; }
+        .vector-field { stroke: #cbd5e1; stroke-width: 1; marker-end: url(#arrow); }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">∫</div>
+            Aprende-E.D
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <span>📊</span> Dashboard
+            </li>
+            <li class="nav-item active">
+                <span>📘</span> Lecciones
+            </li>
+            <li class="nav-item">
+                <span>✏️</span> Práctica Libre
+            </li>
+            <li class="nav-item">
+                <span>🏆</span> Desafíos
+            </li>
+            <li class="nav-item">
+                <span>⚙️</span> Configuración
+            </li>
+        </ul>
+        <div class="user-profile">
+            <div class="avatar">JS</div>
+            <div>
+                <div style="font-weight: 600;">Juan Student</div>
+                <div style="font-size: 0.8rem; color: #94a3b8;">Estudiante Ing.</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN WINDOW -->
+    <main class="main-window">
+        <!-- Toolbar -->
+        <header class="toolbar">
+            <div class="breadcrumbs">
+                Módulo B: Ecuaciones Diferenciales > <strong>Factores Integrantes</strong>
+            </div>
+            <div class="stats-bar">
+                <div class="stat-pill">
+                    <span>🔥</span> Racha: 3 días
+                </div>
+                <div class="stat-pill elo">
+                    <span>📈</span> ELO: 1420
+                </div>
+                <div class="stat-pill">
+                    <span>⭐</span> Nivel 4
+                </div>
+            </div>
+        </header>
+
+        <!-- Workspace -->
+        <div class="workspace">
+            
+            <!-- Left: Lesson Content -->
+            <div class="content-panel">
+                <div class="paper-card">
+                    <h1>Factor Integrante</h1>
+                    <h2>Resolución de E.D. Lineales de Primer Orden</h2>
+
+                    <p class="problem-text">
+                        Considere la ecuación diferencial lineal no homogénea estándar:
+                    </p>
+
+                    <div class="math-block">
+                        $$ \frac{dy}{dx} + P(x)y = Q(x) $$
+                    </div>
+
+                    <p class="problem-text">
+                        Para resolverla, multiplicamos toda la ecuación por el factor integrante $\mu(x)$, definido como:
+                    </p>
+
+                    <div class="math-block">
+                        $$ \mu(x) = e^{\int P(x) \, dx} $$
+                    </div>
+
+                    <p class="problem-text">
+                        <strong>Ejercicio Generado #4592:</strong><br>
+                        Resuelva el siguiente problema de valor inicial:
+                    </p>
+
+                    <div class="math-block">
+                        $$ x \frac{dy}{dx} - 4y = x^6 e^x, \quad y(1) = 0 $$
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Tu Respuesta ($y(x) =$)</label>
+                        <input type="text" class="math-input" placeholder="Ej: x^4 * (e^x - e)">
+                        <button class="action-btn">
+                            <span>✅</span> Validar Solución
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Right: Visual Tools -->
+            <aside class="tools-panel">
+                <div class="panel-header">
+                    <span>Visualización Dinámica</span>
+                    <span style="font-size:0.8rem; color:#94a3b8;">Matplotlib Backend</span>
+                </div>
+
+                <div class="canvas-container">
+                    <!-- Simulated Matplotlib Graph using SVG -->
+                    <div class="matplotlib-sim">
+                        <svg width="100%" height="100%" viewBox="0 0 300 300">
+                            <!-- Defs for markers -->
+                            <defs>
+                                <marker id="arrow" markerWidth="6" markerHeight="6" refX="0" refY="3" orient="auto">
+                                    <path d="M0,0 L0,6 L6,3 z" fill="#cbd5e1" />
+                                </marker>
+                            </defs>
+
+                            <!-- Grid -->
+                            <line x1="20" y1="280" x2="280" y2="280" class="axis" /> <!-- X Axis -->
+                            <line x1="20" y1="20" x2="20" y2="280" class="axis" /> <!-- Y Axis -->
+                            
+                            <!-- Function Curve: simulating y = x^4(e^x - e) roughly -->
+                            <path d="M 20 280 Q 100 280 150 200 T 280 50" class="function-line" />
+                            
+                            <!-- Slope Field (Abstract representation) -->
+                            <line x1="50" y1="250" x2="60" y2="245" class="vector-field"/>
+                            <line x1="100" y1="220" x2="110" y2="210" class="vector-field"/>
+                            <line x1="150" y1="180" x2="160" y2="160" class="vector-field"/>
+                            <line x1="200" y1="120" x2="210" y2="90" class="vector-field"/>
+                            
+                            <!-- Labels -->
+                            <text x="270" y="270" font-size="10" fill="#64748b">x</text>
+                            <text x="30" y="30" font-size="10" fill="#64748b">y</text>
+                        </svg>
+                    </div>
+
+                    <div class="plot-legend">
+                        <div class="legend-item">
+                            <div class="color-dot" style="background:#3b82f6;"></div>
+                            <span>Solución Particular $y_p(x)$</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="color-dot" style="background:#cbd5e1;"></div>
+                            <span>Campo de Direcciones</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hint-box">
+                    <div class="hint-title">💡 Pista Inteligente</div>
+                    <p class="hint-text">
+                        Primero, asegúrate de llevar la E.D. a su forma estándar dividiendo todo por $x$. Recuerda que $x \neq 0$.
+                    </p>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+</body>
+</html>

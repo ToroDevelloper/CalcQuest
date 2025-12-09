@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprende-E.D | Asistente Personal</title>
+    <!-- MathJax Configuration -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+        :root {
+            --bg-app: #f0f4f8;
+            --primary: #6366f1; /* Indigo */
+            --primary-light: #818cf8;
+            --accent: #ec4899; /* Pink */
+            --success: #10b981;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --card-bg: #ffffff;
+            --nav-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-app);
+            height: 100vh;
+            display: flex;
+            color: var(--text-dark);
+            overflow: hidden;
+        }
+
+        /* --- NAVIGATION SIDEBAR (Mobile App Style on Desktop) --- */
+        .sidebar {
+            width: 90px;
+            background-color: var(--nav-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            z-index: 10;
+        }
+
+        .nav-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            color: var(--text-light);
+            background: transparent;
+        }
+
+        .nav-icon:hover {
+            background-color: #f1f5f9;
+            transform: scale(1.1);
+        }
+
+        .nav-icon.active {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .logo-placeholder {
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 40px;
+            font-size: 1.2rem;
+        }
+
+        /* --- MAIN CONTENT CONTAINER --- */
+        .app-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- VIEW: COMMON STYLES --- */
+        .view-section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            overflow-y: auto;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            pointer-events: none;
+            display: none; /* Hidden by default */
+        }
+
+        .view-section.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+            display: block;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        /* --- VIEW 1: DASHBOARD --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: #e0e7ff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-info .value { font-size: 1.5rem; font-weight: 800; }
+        .stat-info .label { font-size: 0.9rem; color: var(--text-light); }
+
+        .learning-path {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 800px;
+        }
+
+        .module-card {
+            background: white;
+            padding: 25px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .module-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border-color: var(--primary-light);
+        }
+
+        .module-left { display: flex; align-items: center; gap: 20px; }
+        .module-icon { 
+            width: 60px; height: 60px; 
+            border-radius: 18px; 
+            background: #fdf2f8; 
+            color: var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem;
+        }
+        .module-title { font-weight: 700; font-size: 1.1rem; }
+        .module-desc { font-size: 0.9rem; color: var(--text-light); }
+
+        .progress-pill {
+            background: #ecfdf5;
+            color: var(--success);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        /* --- VIEW 2: ASSISTANT SOLVER (Chat Interface) --- */
+        .solver-layout {
+            display: flex;
+            gap: 30px;
+            height: calc(100vh - 80px);
+        }
+
+        .chat-container {
+            flex: 1;
+            background: white;
+            border-radius: 24px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .msg {
+            max-width: 80%;
+            padding: 15px 20px;
+            border-radius: 18px;
+            font-size: 1rem;
+            line-height: 1.5;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .msg.bot {
+            background: #f1f5f9;
+            color: var(--text-dark);
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+        }
+
+        .msg.user {
+            background: var(--primary);
+            color: white;
+            border-bottom-right-radius: 4px;
+            align-self: flex-end;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+        }
+
+        .chat-input-area {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .smart-input {
+            flex: 1;
+            padding: 15px 20px;
+            border-radius: 16px;
+            border: 2px solid #e2e8f0;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .smart-input:focus { border-color: var(--primary); }
+
+        .send-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 54px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.1s;
+        }
+
+        .send-btn:active { transform: scale(0.95); }
+
+        .step-panel {
+            width: 350px;
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .step-card {
+            border-left: 3px solid #e2e8f0;
+            padding-left: 20px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .step-card.active { border-color: var(--success); }
+        .step-card.active::before { background: var(--success); }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 0;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #cbd5e1;
+        }
+
+        /* --- VIEW 3: VISUALIZER --- */
+        .vis-container {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slider-controls {
+            margin-top: 40px;
+            width: 100%;
+            max-width: 500px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 16px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+        <div class="logo-placeholder">ED</div>
+        
+        <div class="nav-icon active" onclick="switchView('dashboard', this)">
+            <span>🏠</span>
+        </div>
+        <div class="nav-icon" onclick="switchView('solver', this)">
+            <span>💬</span>
+        </div>
+        <div class="nav-icon" onclick="switchView('visualizer', this)">
+            <span>👁️</span>
+        </div>
+    </nav>
+
+    <div class="app-container">
+        
+        <!-- === VIEW: DASHBOARD === -->
+        <section id="dashboard" class="view-section active">
+            <h1>¡Hola, Ángel! 👋</h1>
+            <h2>Listo para continuar tu racha de aprendizaje?</h2>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-info">
+                        <div class="value">12</div>
+                        <div class="label">Días en Racha</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#fce7f3; color:var(--accent)">💎</div>
+                    <div class="stat-info">
+                        <div class="value">2,450</div>
+                        <div class="label">Puntos XP</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:#dcfce7; color:var(--success)">🏆</div>
+                    <div class="stat-info">
+                        <div class="value">Nivel 5</div>
+                        <div class="label">Aprendiz E.D.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-path">
+                <h3 style="margin-bottom:15px; font-weight:700;">Tu Ruta de Hoy</h3>
+                
+                <div class="module-card">
+                    <div class="module-left">
+                        <div class="module-icon">∫</div>
+                        <div>
+                            <div class="module-title">Introducción a E.D.</div>
+                            <div class="module-desc">Conceptos básicos y notación</div>
+                        </div>
+                    </div>
+                    <div class="progress-pill">Completado</div>
+                </div>
+
+                <div class="module-card" onclick="switchView('solver', document.querySelectorAll('.nav-icon')[1])">
+                    <div class="module-left">
+                        <div class="module-icon" style="background:#e0e7ff; color:var(--primary)">dy</div>
+                        <div>
+                            <div class="module-title">Variables Separables</div>
+                            <div class="module-desc">Aprende a dividir y conquistar</div>
+                        </div>
+                    </div>
+                    <div class="progress-pill" style="background:#e0e7ff; color:var(--primary)">En Progreso</div>
+                </div>
+
+                <div class="module-card" style="opacity:0.6; cursor:default;">
+                    <div class="module-left">
+                        <div class="module-icon" style="background:#f1f5f9; color:#94a3b8">🔒</div>
+                        <div>
+                            <div class="module-title">Factores Integrantes</div>
+                            <div class="module-desc">Bloqueado hasta nivel 6</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- === VIEW: ASSISTANT SOLVER === -->
+        <section id="solver" class="view-section">
+            <h1>Tutor Personal</h1>
+            <h2>Vamos a resolver esto paso a paso. Sin prisa.</h2>
+
+            <div class="solver-layout">
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatFeed">
+                        <div class="msg bot">
+                            ¡Hola! Veo que quieres practicar <strong>Variables Separables</strong>. 
+                            <br><br>
+                            Intentemos resolver esta ecuación juntos:
+                            $$ \frac{dy}{dx} = 2x(y^2 + 1) $$
+                            <br>
+                            ¿Cuál crees que es el primer paso? Pista: Queremos las 'y' a la izquierda.
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" class="smart-input" placeholder="Escribe tu respuesta..." id="userMsg">
+                        <button class="send-btn" onclick="sendMessage()">➤</button>
+                    </div>
+                </div>
+
+                <div class="step-panel">
+                    <h3 style="margin-bottom:20px;">Progreso del Problema</h3>
+                    
+                    <div class="step-card active">
+                        <div style="font-weight:700; margin-bottom:5px;">Paso 1: Separar</div>
+                        <div style="font-size:0.9rem; color:var(--text-light);">
+                            Mover términos de $y$ a un lado y $x$ al otro.
+                        </div>
+                    </div>
+                    
+                    <div class="step-card" style="opacity:0.5;">
+                        <div style="font-weight:700; margin-bottom:5px;">Paso 2: Integrar</div>
+                        <div style="font-size:0.9rem; color:var(--text-light);">
+                            Aplicar la integral a ambos lados de la igualdad.
+                        </div>
+                    </div>
+
+                    <div class="step-card" style="opacity:0.5;">
+                        <div style="font-weight:700; margin-bottom:5px;">Paso 3: Despejar</div>
+                        <div style="font-size:0.9rem; color:var(--text-light);">
+                            Aislar $y$ para encontrar la Solución General.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- === VIEW: VISUALIZER === -->
+        <section id="visualizer" class="view-section">
+            <h1>Laboratorio Visual</h1>
+            <h2>Juega con los parámetros para entender el comportamiento.</h2>
+
+            <div class="vis-container">
+                <!-- Simple SVG Animation Placeholder -->
+                <svg width="600" height="400" viewBox="0 0 600 400">
+                    <line x1="50" y1="350" x2="550" y2="350" stroke="#cbd5e1" stroke-width="2"/>
+                    <line x1="50" y1="50" x2="50" y2="350" stroke="#cbd5e1" stroke-width="2"/>
+                    
+                    <!-- Dynamic Curve -->
+                    <path d="M 50 350 Q 300 350 550 50" fill="none" stroke="#6366f1" stroke-width="4" stroke-linecap="round"/>
+                    
+                    <circle cx="300" cy="200" r="8" fill="#ec4899">
+                        <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                </svg>
+
+                <div class="slider-controls">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                        <strong>Constante C</strong>
+                        <span>2.5</span>
+                    </div>
+                    <input type="range" min="0" max="100">
+                    <div style="margin-top:10px; font-size:0.85rem; color:#64748b;">
+                        Desliza para ver cómo la constante de integración afecta a la familia de curvas.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Simple SPA Router Logic
+        function switchView(viewId, navElement) {
+            // Update Navigation
+            document.querySelectorAll('.nav-icon').forEach(icon => icon.classList.remove('active'));
+            if(navElement) navElement.classList.add('active');
+
+            // Update Views
+            document.querySelectorAll('.view-section').forEach(view => {
+                view.classList.remove('active');
+                if(view.id === viewId) {
+                    // Small delay to allow fade out
+                    setTimeout(() => view.classList.add('active'), 50);
+                }
+            });
+        }
+
+        // Mock Chat Logic
+        function sendMessage() {
+            const input = document.getElementById('userMsg');
+            const text = input.value;
+            if(!text) return;
+
+            const chat = document.getElementById('chatFeed');
+            
+            // Add User Message
+            const userBubble = document.createElement('div');
+            userBubble.className = 'msg user';
+            userBubble.innerText = text;
+            chat.appendChild(userBubble);
+            input.value = '';
+
+            // Auto-scroll
+            chat.scrollTop = chat.scrollHeight;
+
+            // Mock Bot Reply
+            setTimeout(() => {
+                const botBubble = document.createElement('div');
+                botBubble.className = 'msg bot';
+                botBubble.innerHTML = "¡Excelente intuición! Dividir por $(y^2+1)$ es correcto.<br>Ahora integramos ambos lados: $$\\int \\frac{1}{y^2+1} dy = \\int 2x dx$$";
+                chat.appendChild(botBubble);
+                chat.scrollTop = chat.scrollHeight;
+                
+                // Re-render MathJax
+                MathJax.typesetPromise();
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
