@@ -1,10 +1,11 @@
-# Documento de Diseño Técnico (TDD) - Aprende-E.D
+# Documento de Diseño Técnico (TDD) - GreenStack
 **Asistente Personal Gamificado para Cálculo y Ecuaciones Diferenciales**
-*(Versión 2.0 - Pivote a EdTech/Gamificación)*
+*(Versión 2.1 - Rebranding)*
 
+**Proyecto:** GreenStack (Anteriormente Aprende-E.D)
 **Autor:** Kilo Code (Arquitecto de Software Senior)
 **Fecha:** 09 de Diciembre, 2025
-**Filosofía:** "Matemáticas Divertidas para Principiantes Absolutos"
+**Filosofía:** "Construye tu conocimiento, test a test."
 
 ---
 
