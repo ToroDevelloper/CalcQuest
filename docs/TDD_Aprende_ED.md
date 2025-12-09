@@ -1,8 +1,8 @@
-# Documento de Diseño Técnico (TDD) - GreenStack
+# Documento de Diseño Técnico (TDD) - Diffy
 **Asistente Personal Gamificado para Cálculo y Ecuaciones Diferenciales**
-*(Versión 2.1 - Rebranding)*
+*(Versión 2.2 - Rebranding Final)*
 
-**Proyecto:** GreenStack (Anteriormente Aprende-E.D)
+**Proyecto:** Diffy (Anteriormente Aprende-E.D)
 **Autor:** Kilo Code (Arquitecto de Software Senior)
 **Fecha:** 09 de Diciembre, 2025
 **Filosofía:** "Construye tu conocimiento, test a test."
